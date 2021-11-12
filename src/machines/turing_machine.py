@@ -1,7 +1,7 @@
 from collections import namedtuple
 from typing import Set, Dict, NamedTuple
 
-__all__ = ['TuringMachine']
+__all__ = ["TuringMachine"]
 
 
 class Direction:
@@ -28,7 +28,7 @@ class TransitionContext:
 
     @classmethod
     def from_string(cls, transition_context_string):
-        from_state, tape_symbol = transition_context_string.split(',')
+        from_state, tape_symbol = transition_context_string.split(",")
         return TransitionContext(state=State(from_state), tape_symbol=tape_symbol)
 
 
@@ -39,15 +39,26 @@ class Transition:
 
     @classmethod
     def from_string(cls, transition_string):
-        symbol_to_direction = {'<': Direction.LEFT, '-': Direction.STAY, '>': Direction.RIGHT}
-        to_state, tape_symbol, direction = transition_string.split(',')
-        return Transition(context_to=TransitionContext(State(to_state), tape_symbol=tape_symbol),
-                          direction=symbol_to_direction[direction])
+        symbol_to_direction = {
+            "<": Direction.LEFT,
+            "-": Direction.STAY,
+            ">": Direction.RIGHT,
+        }
+        to_state, tape_symbol, direction = transition_string.split(",")
+        return Transition(
+            context_to=TransitionContext(State(to_state), tape_symbol=tape_symbol),
+            direction=symbol_to_direction[direction],
+        )
 
 
 class TuringMachine:
-    def __init__(self, states: Set[State] = None, initial_state: State = None,
-                 final_states: Set[State] = None, transitions: Dict[TransitionContext, Transition] = None):
+    def __init__(
+        self,
+        states: Set[State] = None,
+        initial_state: State = None,
+        final_states: Set[State] = None,
+        transitions: Dict[TransitionContext, Transition] = None,
+    ):
         self.states = states
         self.initial_state = initial_state
         self.final_states = final_states
@@ -55,7 +66,7 @@ class TuringMachine:
 
     @classmethod
     def from_file(cls, filename):
-        configuration_file = open(filename, 'r')
+        configuration_file = open(filename, "r")
 
         states = set()
         initial_state = None
@@ -63,23 +74,31 @@ class TuringMachine:
         transitions = dict()
 
         for line in configuration_file:
-            if line.startswith('initial_state'):
+            if line.startswith("initial_state"):
                 initial_state = line.split("=")[1].strip()
-            elif line.startswith('final_states'):
+            elif line.startswith("final_states"):
                 rhs = line.split("=")[1]
-                final_states = set(map(lambda x: x.strip(), rhs.split(',')))
-            elif line.startswith('#') or line == '\n':
+                final_states = set(map(lambda x: x.strip(), rhs.split(",")))
+            elif line.startswith("#") or line == "\n":
                 continue
             else:
-                prev_transition_context_string, transition_string = map(lambda x: x.strip(), line.split("==>"))
-                states.add(prev_transition_context_string.split(',')[0])
+                prev_transition_context_string, transition_string = map(
+                    lambda x: x.strip(), line.split("==>")
+                )
+                states.add(prev_transition_context_string.split(",")[0])
 
-                prev_transition_context = TransitionContext.from_string(prev_transition_context_string)
+                prev_transition_context = TransitionContext.from_string(
+                    prev_transition_context_string
+                )
                 transition = Transition.from_string(transition_string)
 
                 transitions.update({prev_transition_context: transition})
 
         configuration_file.close()
 
-        return TuringMachine(states=states, initial_state=initial_state,
-                             final_states=final_states, transitions=transitions)
+        return TuringMachine(
+            states=states,
+            initial_state=initial_state,
+            final_states=final_states,
+            transitions=transitions,
+        )
