@@ -1,5 +1,4 @@
-from collections import namedtuple
-from typing import Set, Dict, NamedTuple
+from typing import Set, Dict
 
 __all__ = ["TuringMachine"]
 
