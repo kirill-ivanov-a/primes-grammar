@@ -2,7 +2,7 @@ import enum
 from typing import List
 from src.grammars.symbol import Symbol
 
-__all__ = ["Production"]
+__all__ = ["Production", "ExecType"]
 
 
 class ExecType(enum.Enum):
@@ -25,7 +25,7 @@ class Production:
         self._exec_type = exec_type
 
     def __str__(self):
-        return str(self._head) + " -> " + str(self._body)
+        return " ".join(map(str, self._head)) + " -> " + " ".join(map(str, self._body))
 
     def __eq__(self, other: "Production"):
         if isinstance(other, Production):
