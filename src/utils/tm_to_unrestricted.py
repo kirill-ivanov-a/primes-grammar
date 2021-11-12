@@ -68,8 +68,6 @@ class TMToUnrestricted:
                 context_sym = Variable(f"[{aVal}|{context.tape_sym}]")
                 context_to_sym = Variable(f"[{aVal}|{d_sym.value}]")
 
-                head = []
-                body = []
                 if tr.direction == Direction.LEFT:
                     for left_sym in gamma:
                         for bVal in TMToUnrestricted.SIGMA_EPS:
@@ -90,9 +88,6 @@ class TMToUnrestricted:
                     head = [state_from_sym, context_sym]
                     body = [context_to_sym, state_to_sym]
                     productions.add(Production(head, body, ExecType.TM_EMULATING))
-
-        head = []
-        body = []
 
         for final_state in tm.final_states:
             q_sym = Variable(final_state.value)
