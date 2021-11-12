@@ -2,7 +2,7 @@ import enum
 from typing import List
 from src.grammars.symbol import Symbol
 
-__all__ = ["Production"]
+__all__ = ["Production", "ExecType"]
 
 
 class ExecType(enum.Enum):
