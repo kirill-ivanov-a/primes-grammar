@@ -290,9 +290,3 @@ def __get_tape_symbols(lba: TuringMachine, left: str, right: str):
         if trans_symbol not in {left, right}:
             possible_tape_symbols.add(trans_symbol)
     return possible_tape_symbols
-
-
-tm = TuringMachine.from_file("../../resources/lba.txt")
-csg = lba_to_csg(tm, {"1"})
-csg = csg.rename_variables()
-csg.to_file("./out.txt")
