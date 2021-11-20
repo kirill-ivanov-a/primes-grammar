@@ -1,16 +1,18 @@
 from itertools import product
-from typing import List, Set
+from typing import Set
 
 from src.machines.turing_machine import TuringMachine
 from src.grammars.unrestricted_grammar import UnrestrictedGrammar
 from src.grammars.variable import Variable
 from src.grammars.terminal import Terminal
-from src.grammars.production import Production, ExecType
+from src.grammars.production import Production
 from src.machines.direction import Direction
 
+__all__ = ["lba_to_csg"]
 
-def create_variable(*string_values: str):
-    return Variable("[" + ",".join(string_values) + "]")
+
+def create_variable(*string_values):
+    return Variable("[" + ",".join(map(str, string_values)) + "]")
 
 
 def get_possible_tape_symbols(lba: TuringMachine, left: str, right: str):
@@ -27,7 +29,10 @@ def get_possible_tape_symbols(lba: TuringMachine, left: str, right: str):
 
 
 def lba_to_csg(
-    lba: TuringMachine, L: str = "%", R: str = "$", alphabet: Set[str] = None
+    lba: TuringMachine,
+    alphabet: Set[str],
+    L: str = "%",
+    R: str = "$",
 ) -> UnrestrictedGrammar:
     alphabet = {Terminal(symbol) for symbol in alphabet}
     productions = set()
@@ -40,10 +45,17 @@ def lba_to_csg(
         # 4.1, 4.2, 4.3, |w| > 1
         productions |= {
             Production(
-                [A1], [create_variable(q0, L, a, a), A2], ExecType.TAPE_GENERATING
+                [A1],
+                [create_variable(q0, L, a, a), A2],
             ),
-            Production([A2], [create_variable(a, a), A2], ExecType.TAPE_GENERATING),
-            Production([A2], [create_variable(a, a, R)], ExecType.TAPE_GENERATING),
+            Production(
+                [A2],
+                [create_variable(a, a), A2],
+            ),
+            Production(
+                [A2],
+                [create_variable(a, a, R)],
+            ),
         }
     possible_tape_symbols = get_possible_tape_symbols(lba, L, R)
 
@@ -69,7 +81,6 @@ def lba_to_csg(
                             Production(
                                 [create_variable(q, L, X, a)],
                                 [create_variable(L, p, X, a)],
-                                ExecType.TM_EMULATING,
                             )
                         )
                     elif ctx.tape_sym == X and trans.direction == Direction.LEFT:
@@ -78,13 +89,11 @@ def lba_to_csg(
                             Production(
                                 [create_variable(L, q, X, a)],
                                 [create_variable(p, L, Y, a)],
-                                ExecType.TM_EMULATING,
                             ),
                             # 6.2
                             Production(
                                 [create_variable(Z, b), create_variable(q, X, a)],
                                 [create_variable(p, Z, b), create_variable(Y, a)],
-                                ExecType.TM_EMULATING,
                             ),
                             # 6.4
                             Production(
@@ -96,7 +105,6 @@ def lba_to_csg(
                                     create_variable(L, p, Z, b),
                                     create_variable(Y, a),
                                 ],
-                                ExecType.TM_EMULATING,
                             ),
                             # 7.3
                             Production(
@@ -108,7 +116,6 @@ def lba_to_csg(
                                     create_variable(p, Z, b),
                                     create_variable(Y, a, R),
                                 ],
-                                ExecType.TM_EMULATING,
                             ),
                             Production(
                                 [
@@ -119,7 +126,6 @@ def lba_to_csg(
                                     create_variable(L, p, Z, b),
                                     create_variable(Y, a, R),
                                 ],
-                                ExecType.TM_EMULATING,
                             ),
                         }
                     elif (
@@ -132,7 +138,6 @@ def lba_to_csg(
                             Production(
                                 [create_variable(X, a, q, R)],
                                 [create_variable(p, X, a, R)],
-                                ExecType.TM_EMULATING,
                             )
                         )
                     elif ctx.tape_sym == X and trans.direction == Direction.RIGHT:
@@ -141,30 +146,25 @@ def lba_to_csg(
                             Production(
                                 [create_variable(L, q, X, a), create_variable(Z, b)],
                                 [create_variable(L, Y, a), create_variable(p, Z, b)],
-                                ExecType.TM_EMULATING,
                             ),
                             Production(
                                 [create_variable(L, q, X, a), create_variable(Z, b, R)],
                                 [create_variable(L, Y, a), create_variable(p, Z, b, R)],
-                                ExecType.TM_EMULATING,
                             ),
                             # 6.1
                             Production(
                                 [create_variable(q, X, a), create_variable(Z, b)],
                                 [create_variable(Y, a), create_variable(p, Z, b)],
-                                ExecType.TM_EMULATING,
                             ),
                             # 6.3
                             Production(
                                 [create_variable(q, X, a), create_variable(Z, b, R)],
                                 [create_variable(Y, a), create_variable(p, Z, b, R)],
-                                ExecType.TM_EMULATING,
                             ),
                             # 7.1
                             Production(
                                 [create_variable(q, X, a, R)],
                                 [create_variable(Y, a, p, R)],
-                                ExecType.TM_EMULATING,
                             ),
                         }
                     elif (
@@ -176,7 +176,6 @@ def lba_to_csg(
                             Production(
                                 [create_variable(q, L, X, a)],
                                 [create_variable(p, L, X, a)],
-                                ExecType.TM_EMULATING,
                             )
                         )
                     elif (
@@ -188,7 +187,6 @@ def lba_to_csg(
                             Production(
                                 [create_variable(X, a, q, R)],
                                 [create_variable(X, a, p, R)],
-                                ExecType.TM_EMULATING,
                             )
                         )
                     elif ctx.tape_sym == X and trans.direction == Direction.STAY:
@@ -196,7 +194,6 @@ def lba_to_csg(
                             Production(
                                 [create_variable(q, X, a)],
                                 [create_variable(p, Y, a)],
-                                ExecType.TM_EMULATING,
                             )
                         )
 
@@ -208,25 +205,22 @@ def lba_to_csg(
                     Production(
                         [create_variable(q, L, X, a)],
                         [a],
-                        ExecType.WORD_RESTORING,
                     ),
                     Production(
                         [create_variable(L, q, X, a)],
                         [a],
-                        ExecType.WORD_RESTORING,
                     ),
                     Production(
-                        [create_variable(q, X, a)], [a], ExecType.WORD_RESTORING
+                        [create_variable(q, X, a)],
+                        [a],
                     ),
                     Production(
                         [create_variable(q, X, a, R)],
                         [a],
-                        ExecType.WORD_RESTORING,
                     ),
                     Production(
                         [create_variable(X, a, q, R)],
                         [a],
-                        ExecType.WORD_RESTORING,
                     ),
                 }
 
@@ -234,16 +228,26 @@ def lba_to_csg(
     for X in possible_tape_symbols:
         for a, b in product(alphabet, alphabet):
             productions |= {
-                Production([a, create_variable(X, b)], [a, b], ExecType.WORD_RESTORING),
+                Production([a, create_variable(X, b)], [a, b]),
                 Production(
-                    [a, create_variable(X, b, R)], [a, b], ExecType.WORD_RESTORING
+                    [a, create_variable(X, b, R)],
+                    [a, b],
                 ),
-                Production([create_variable(X, a), b], [a, b], ExecType.WORD_RESTORING),
+                Production(
+                    [create_variable(X, a), b],
+                    [a, b],
+                ),
                 Production(
                     [create_variable(L, X, a), b],
                     [a, b],
-                    ExecType.WORD_RESTORING,
                 ),
             }
 
     return UnrestrictedGrammar(productions=productions, start_symbol=A1)
+
+
+tm = TuringMachine.from_file("../../resources/lba.txt")
+csg = lba_to_csg(tm, {"1"})
+csg = csg.rename_variables()
+csg = csg.remove_unit_productions()
+csg.to_file("./out.txt")

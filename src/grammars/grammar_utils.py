@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from src import Symbol
+from src.grammars.symbol import Symbol
 
 __all__ = ["map_names"]
 
