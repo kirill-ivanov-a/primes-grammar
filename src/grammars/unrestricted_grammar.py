@@ -1,6 +1,6 @@
 __all__ = ["UnrestrictedGrammar"]
 
-from typing import Set, Tuple
+from typing import Set
 
 from src.grammars.grammar_utils import map_names
 from src.grammars.production import Production
