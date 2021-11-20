@@ -1,4 +1,5 @@
 # primes-grammar
+![image](https://user-images.githubusercontent.com/55203533/142741598-dd99ce15-47e8-48ec-a1ea-5f2b975b6a50.png)
 
 ## About
 Yet another machine to grammar converter. The following transformations are available:
