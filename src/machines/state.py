@@ -10,3 +10,6 @@ class State:
             return False
         else:
             return self.value == other.value
+
+    def __hash__(self):
+        return hash(self.value)

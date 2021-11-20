@@ -2,13 +2,7 @@ import enum
 from typing import List
 from src.grammars.symbol import Symbol
 
-__all__ = ["Production", "ExecType"]
-
-
-class ExecType(enum.Enum):
-    TAPE_GENERATING = 1
-    TM_EMULATING = 2
-    WORD_RESTORING = 3
+__all__ = ["Production"]
 
 
 class Production:
@@ -18,11 +12,9 @@ class Production:
         self,
         head: List[Symbol],
         body: List[Symbol],
-        exec_type: ExecType = ExecType.WORD_RESTORING,
     ):
         self._head = head
         self._body = body
-        self._exec_type = exec_type
 
     def __str__(self):
         return " ".join(map(str, self._head)) + " -> " + " ".join(map(str, self._body))
@@ -44,8 +36,3 @@ class Production:
     def body(self) -> List[Symbol]:
         """Get the body objects"""
         return self._body
-
-    @property
-    def exec_type(self) -> ExecType:
-        """Get the body objects"""
-        return self._exec_type

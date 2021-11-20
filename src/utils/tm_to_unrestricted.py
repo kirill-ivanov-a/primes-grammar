@@ -2,7 +2,7 @@ from src.machines.turing_machine import TuringMachine
 from src.grammars.unrestricted_grammar import UnrestrictedGrammar
 from src.grammars.variable import Variable
 from src.grammars.terminal import Terminal
-from src.grammars.production import Production, ExecType
+from src.grammars.production import Production
 from src.machines.direction import Direction
 
 __all__ = ["TMToUnrestricted"]
@@ -26,24 +26,21 @@ class TMToUnrestricted:
         q0 = Variable(tm.initial_state.value)
 
         productions = {
-            Production([s], [s1, q0, s2], ExecType.TAPE_GENERATING),
-            Production([s2], [s3], ExecType.TAPE_GENERATING),
+            Production(
+                [s],
+                [s1, q0, s2],
+            ),
+            Production([s2], [s3]),
             Production(
                 [s1],
                 [Variable(f"[{TMToUnrestricted.EPS}|{TMToUnrestricted.BLANK}]")],
-                ExecType.TAPE_GENERATING,
             ),
             Production(
                 [s3],
                 [Variable(f"[{TMToUnrestricted.EPS}|{TMToUnrestricted.BLANK}]")],
-                ExecType.TAPE_GENERATING,
             ),
-            Production(
-                [s1], [Variable(TMToUnrestricted.EPS)], ExecType.TAPE_GENERATING
-            ),
-            Production(
-                [s3], [Variable(TMToUnrestricted.EPS)], ExecType.TAPE_GENERATING
-            ),
+            Production([s1], [Variable(TMToUnrestricted.EPS)]),
+            Production([s3], [Variable(TMToUnrestricted.EPS)]),
         }
 
         for symbol in TMToUnrestricted.SIGMA:
@@ -54,7 +51,6 @@ class TMToUnrestricted:
                         Variable(f"[{symbol}|{symbol}]"),
                         s2,
                     ],
-                    ExecType.TAPE_GENERATING,
                 )
             )
 
@@ -75,19 +71,17 @@ class TMToUnrestricted:
 
                             head = [context_left_sym, state_from_sym, context_sym]
                             body = [state_to_sym, context_left_sym, context_to_sym]
-                            productions.add(
-                                Production(head, body, ExecType.TM_EMULATING)
-                            )
+                            productions.add(Production(head, body))
 
                 elif tr.direction == Direction.STAY:
                     head = [state_from_sym, context_sym]
                     body = [state_to_sym, context_to_sym]
-                    productions.add(Production(head, body, ExecType.TM_EMULATING))
+                    productions.add(Production(head, body))
 
                 elif tr.direction == Direction.RIGHT:
                     head = [state_from_sym, context_sym]
                     body = [context_to_sym, state_to_sym]
-                    productions.add(Production(head, body, ExecType.TM_EMULATING))
+                    productions.add(Production(head, body))
 
         for final_state in tm.final_states:
             q_sym = Variable(final_state.value)
@@ -98,14 +92,14 @@ class TMToUnrestricted:
                     context_sym = Variable(f"[{aVal}|{cVal}]")
                     head = [context_sym, q_sym]
                     body = [q_sym, a_sym, q_sym]
-                    productions.add(Production(head, body, ExecType.WORD_RESTORING))
+                    productions.add(Production(head, body))
 
                     head = [q_sym, context_sym]
-                    productions.add(Production(head, body, ExecType.WORD_RESTORING))
+                    productions.add(Production(head, body))
 
             head = [q_sym]
             body = [Terminal(TMToUnrestricted.EPS)]
-            productions.add(Production(head, body, ExecType.WORD_RESTORING))
+            productions.add(Production(head, body))
 
         return UnrestrictedGrammar(productions=productions, start_symbol=s)
 

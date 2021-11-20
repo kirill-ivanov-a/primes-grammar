@@ -17,6 +17,3 @@ class Symbol(ABC):
 
     def get_value(self):
         return self.value
-
-    def __hash__(self):
-        return hash(self.get_value())

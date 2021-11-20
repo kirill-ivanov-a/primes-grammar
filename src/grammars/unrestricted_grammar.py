@@ -1,8 +1,8 @@
 __all__ = ["UnrestrictedGrammar"]
 
-from typing import Set
+from typing import Set, Tuple
 
-from src import map_names
+from src.grammars.grammar_utils import map_names
 from src.grammars.production import Production
 from src.grammars.unrestricted_grammar_exceptions import (
     InvalidUnrestrictedGrammarFormatException,
@@ -49,9 +49,7 @@ class UnrestrictedGrammar:
         return self._start_symbol
 
     def rename_variables(self) -> "UnrestrictedGrammar":
-        mapper = {
-            v: Variable(f"{v.get_value()}{i}") for i, v in enumerate(self._variables)
-        }
+        mapper = {v: Variable(f"S{i}") for i, v in enumerate(self._variables)}
         mapper.update(zip(self._terminals, self._terminals))
 
         new_productions = {
@@ -63,9 +61,6 @@ class UnrestrictedGrammar:
         return UnrestrictedGrammar(
             productions=new_productions, start_symbol=new_start_symbol
         )
-
-    def minimize(self):
-        raise NotImplementedError("")
 
     def to_text(self) -> str:
         return "\n".join(str(p) for p in self.productions)
