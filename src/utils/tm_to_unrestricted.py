@@ -9,14 +9,14 @@ __all__ = ["TMToUnrestricted"]
 
 
 class TMToUnrestricted:
-    SIGMA = {"a"}
+    SIGMA = {"1"}
     EPS = "$"
     BLANK = "_"
     SIGMA_EPS = SIGMA | set(EPS)
 
     @staticmethod
     def convert(tm: TuringMachine):
-        gamma = TMToUnrestricted.get_poss_tape_symbols(tm)
+        gamma = TMToUnrestricted.__get_tape_symbols(tm)
 
         s = Variable("S")
         s1 = Variable("S1")
@@ -54,15 +54,15 @@ class TMToUnrestricted:
                 )
             )
 
-        for aVal in TMToUnrestricted.SIGMA_EPS:
+        for a in TMToUnrestricted.SIGMA_EPS:
             for context in tm.transitions.keys():
                 tr = tm.transitions[context]
 
                 state_from_sym = Variable(context.state.value)
                 state_to_sym = Variable(tr.context_to.state.value)
                 d_sym = Variable(tr.context_to.tape_sym)
-                context_sym = Variable(f"[{aVal}|{context.tape_sym}]")
-                context_to_sym = Variable(f"[{aVal}|{d_sym.value}]")
+                context_sym = Variable(f"[{a}|{context.tape_sym}]")
+                context_to_sym = Variable(f"[{a}|{d_sym.value}]")
 
                 if tr.direction == Direction.LEFT:
                     for left_sym in gamma:
@@ -87,9 +87,9 @@ class TMToUnrestricted:
             q_sym = Variable(final_state.value)
 
             for cVal in gamma:
-                for aVal in TMToUnrestricted.SIGMA_EPS:
-                    a_sym = Terminal(aVal)
-                    context_sym = Variable(f"[{aVal}|{cVal}]")
+                for a in TMToUnrestricted.SIGMA_EPS:
+                    a_sym = Terminal(a)
+                    context_sym = Variable(f"[{a}|{cVal}]")
                     head = [context_sym, q_sym]
                     body = [q_sym, a_sym, q_sym]
                     productions.add(Production(head, body))
@@ -104,11 +104,11 @@ class TMToUnrestricted:
         return UnrestrictedGrammar(productions=productions, start_symbol=s)
 
     @staticmethod
-    def get_poss_tape_symbols(tm: TuringMachine):
-        poss_tape_symbols = set()
+    def __get_tape_symbols(tm: TuringMachine):
+        tape_symbols = set()
 
         for context, transition in tm.transitions.items():
-            poss_tape_symbols.add(transition.context_to.tape_sym)
-            poss_tape_symbols.add(context.tape_sym)
+            tape_symbols.add(transition.context_to.tape_sym)
+            tape_symbols.add(context.tape_sym)
 
-        return poss_tape_symbols
+        return tape_symbols

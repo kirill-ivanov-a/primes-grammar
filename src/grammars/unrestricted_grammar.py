@@ -1,6 +1,6 @@
 __all__ = ["UnrestrictedGrammar"]
 
-from typing import Set, Tuple
+from typing import Set
 
 from src.grammars.grammar_utils import map_names
 from src.grammars.production import Production
@@ -69,8 +69,13 @@ class UnrestrictedGrammar:
         with open(path, "w") as output:
             output.write(self.to_text())
 
+    # @classmethod
+    # def from_file(cls, path: str):
+    #     with open(path, "r") as f:
+    #         return cls.from_text(f.read(), )
+
     @classmethod
-    def from_text(cls, text, start_symbol=Variable("S")) -> "UnrestrictedGrammar":
+    def from_text(cls, text, start_symbol=Variable("S0")) -> "UnrestrictedGrammar":
         productions = set()
         for line in text.splitlines():
             line = line.strip()
@@ -86,11 +91,11 @@ class UnrestrictedGrammar:
             head_text, body_text = production_objects
             head = [
                 Variable(symbol) if symbol.isupper() else Terminal(symbol)
-                for symbol in head_text.strip()
+                for symbol in head_text.strip().split(" ")
             ]
             body = [
                 Variable(symbol) if symbol.isupper() else Terminal(symbol)
-                for symbol in head_text.strip()
+                for symbol in head_text.strip().split(" ")
             ]
 
             if not any(isinstance(s, Variable) for s in head):
