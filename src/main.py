@@ -12,17 +12,17 @@ from src.utils.word_utils import WordUtils
 def generate_t0(path):
     tm = TuringMachine.from_file(path)
     csg = TMToUnrestricted.convert(tm)
-    csg = csg.rename_variables()
+    # csg = csg.rename_variables()
     csg.to_file("t0_out.txt")
 
     return "t0_out.txt"
 
 
 def generate_t1(path):
-    tm = TuringMachine.from_file(path)
-    csg = lba_to_csg(lba=tm, alphabet={"1"})
-    csg = csg.rename_variables()
-    csg.to_file("t1_out.txt")
+    # tm = TuringMachine.from_file(path)
+    # csg = lba_to_csg(lba=tm, alphabet={"1"})
+    # csg = csg.rename_variables()
+    # csg.to_file("t1_out.txt")
 
     return "t1_out.txt"
 
@@ -37,11 +37,9 @@ def main(grammar_type="t0", number=17):
     grammar = None
 
     with open(T0_PATH if grammar_type == "t0" else T1_PATH) as grammar_file:
-        grammar = UnrestrictedGrammar.from_text(
-            grammar_file.read(), start_symbol=Variable("S0")
-        )
+        grammar = UnrestrictedGrammar.from_text(grammar_file.read())
 
-    final_state = "S166" if grammar_type == "t1" else "S33"
+    final_state = "is_prime"
 
     result = WordUtils.contains(
         grammar=grammar,
@@ -56,4 +54,4 @@ def main(grammar_type="t0", number=17):
 
 
 if __name__ == "__main__":
-    main(grammar_type="t1", number=111)
+    main(grammar_type="t0", number=5)

@@ -64,7 +64,7 @@ class UnrestrictedGrammar:
 
     def to_text(self) -> str:
         start_variable_text = f"Start variable: {self._start_symbol.value}\n"
-        sigma_text = f"Sigma:  {' '.join(term.value for term in self._terminals)}\n\n"
+        sigma_text = f"Sigma: {' '.join(term.value for term in self._terminals)}\n\n"
         return (
             start_variable_text
             + sigma_text
@@ -92,12 +92,12 @@ class UnrestrictedGrammar:
         lines = text.splitlines()
         prod_start = 0
         if start_variable_prefix in lines[0]:
-            start_symbol = Variable(lines.split(start_variable_prefix, 1)[1].strip())
+            start_symbol = Variable(lines[0].split(start_variable_prefix, 1)[1].strip())
             prod_start += 1
-        if sigma_prefix in lines[0]:
+        if sigma_prefix in lines[1]:
             sigma = {
                 Terminal(term)
-                for term in lines.split(sigma_prefix, 1)[1].strip().split(" ")
+                for term in lines[1].split(sigma_prefix, 1)[1].strip().split(" ")
             }
             prod_start += 1
         productions = set()
@@ -119,7 +119,7 @@ class UnrestrictedGrammar:
             ]
             body = [
                 Variable(symbol) if symbol.isupper() else Terminal(symbol)
-                for symbol in head_text.strip().split(" ")
+                for symbol in body_text.strip().split(" ")
             ]
 
             if not any(isinstance(s, Variable) for s in head):
