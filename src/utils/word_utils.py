@@ -70,8 +70,8 @@ class WordUtils:
 
                         found_final = True
 
-            if sentence not in visited:
-                visited.add(sentence)
+            if tuple(sentence) not in visited:
+                visited.add(tuple(sentence))
 
                 if found_final:
                     continue
