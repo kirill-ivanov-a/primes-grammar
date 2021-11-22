@@ -244,10 +244,3 @@ def lba_to_csg(
             }
 
     return UnrestrictedGrammar(productions=productions, start_symbol=A1)
-
-
-tm = TuringMachine.from_file("../../resources/lba.txt")
-csg = lba_to_csg(tm, {"1"})
-csg = csg.rename_variables()
-csg = csg.remove_unit_productions()
-csg.to_file("./out.txt")
