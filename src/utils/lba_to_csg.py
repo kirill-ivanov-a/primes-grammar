@@ -1,7 +1,9 @@
+from collections import deque
 from itertools import product
-from typing import Set
+from typing import Set, Tuple, List, Union, Deque
 
 from src.machines.turing_machine import TuringMachine
+from src.utils.tm_to_unrestricted import TMToUnrestricted
 from src.grammars.unrestricted_grammar import UnrestrictedGrammar
 from src.grammars.variable import Variable
 from src.grammars.terminal import Terminal

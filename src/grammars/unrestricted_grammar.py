@@ -63,21 +63,45 @@ class UnrestrictedGrammar:
         )
 
     def to_text(self) -> str:
-        return "\n".join(str(p) for p in self.productions)
+        start_variable_text = f"Start variable: {self._start_symbol.value}\n"
+        sigma_text = f"Sigma:  {' '.join(term.value for term in self._terminals)}\n\n"
+        return (
+            start_variable_text
+            + sigma_text
+            + "\n".join(str(p) for p in self.productions)
+        )
 
     def to_file(self, path):
         with open(path, "w") as output:
             output.write(self.to_text())
 
-    # @classmethod
-    # def from_file(cls, path: str):
-    #     with open(path, "r") as f:
-    #         return cls.from_text(f.read(), )
+    @classmethod
+    def from_file(cls, path: str):
+        with open(path, "r") as f:
+            return cls.from_text(f.read())
 
     @classmethod
-    def from_text(cls, text, start_symbol=Variable("S0")) -> "UnrestrictedGrammar":
+    def from_text(
+        cls,
+        text,
+        start_symbol=Variable("S0"),
+        sigma: Set[Terminal] = None,
+        start_variable_prefix: str = "Start variable:",
+        sigma_prefix: str = "Sigma:",
+    ) -> "UnrestrictedGrammar":
+        lines = text.splitlines()
+        prod_start = 0
+        if start_variable_prefix in lines[0]:
+            start_symbol = Variable(lines.split(start_variable_prefix, 1)[1].strip())
+            prod_start += 1
+        if sigma_prefix in lines[0]:
+            sigma = {
+                Terminal(term)
+                for term in lines.split(sigma_prefix, 1)[1].strip().split(" ")
+            }
+            prod_start += 1
         productions = set()
-        for line in text.splitlines():
+        for line in lines[prod_start:]:
             line = line.strip()
             if not line:
                 continue
@@ -104,4 +128,6 @@ class UnrestrictedGrammar:
                 )
             productions.add(Production(head, body))
 
-        return UnrestrictedGrammar(start_symbol=start_symbol, productions=productions)
+        return UnrestrictedGrammar(
+            start_symbol=start_symbol, productions=productions, terminals=sigma
+        )
