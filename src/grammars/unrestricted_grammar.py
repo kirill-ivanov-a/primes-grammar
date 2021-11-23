@@ -9,7 +9,6 @@ from src.grammars.unrestricted_grammar_exceptions import (
 )
 from src.grammars.variable import Variable
 from src.grammars.terminal import Terminal
-from src.machines import TuringMachine
 
 
 class UnrestrictedGrammar:

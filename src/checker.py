@@ -4,13 +4,13 @@ import pathlib
 import sys
 import logging
 
-from config import Config
+from src.config import Config
 
 from src.utils.word_utils import WordUtils
 from src.grammars.unrestricted_grammar import UnrestrictedGrammar
 from src.machines.turing_machine import TuringMachine
-from utils.tm_to_unrestricted import TMToUnrestricted
-from utils.lba_to_csg import lba_to_csg
+from src.utils.tm_to_unrestricted import TMToUnrestricted
+from src.utils.lba_to_csg import lba_to_csg
 
 
 def __generate_grammar(grammar_type, path):
