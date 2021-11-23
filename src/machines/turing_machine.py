@@ -41,6 +41,7 @@ class TuringMachine:
                     lambda x: x.strip(), line.split("==>")
                 )
                 states.add(State(prev_transition_context_string.split(",")[0]))
+                states.add(State(transition_string.split(",")[0]))
 
                 prev_transition_context = TransitionContext.from_string(
                     prev_transition_context_string
