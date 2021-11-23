@@ -51,9 +51,10 @@ class WordUtils:
                 derivation_sequence[sentence] = list()
 
             if sentence.is_terminal():
-                if sentence == term_sentence:
+                eps_free_sentence = sentence.remove_epsilons()
+                if eps_free_sentence == term_sentence:
                     return derivation_sequence[sentence]
-                if len(sentence.objects) > len(term_sentence.objects):
+                if len(eps_free_sentence.objects) > len(term_sentence.objects):
                     return None
 
             for production in filter(
@@ -77,6 +78,14 @@ class WordUtils:
                                 )
                             ]
                             queue.append(next_sentence)
+            queue = deque(
+                sorted(
+                    queue,
+                    key=lambda sentence: sum(
+                        1 for obj in sentence.objects if isinstance(obj, Variable)
+                    ),
+                )
+            )
         return None
 
     @staticmethod
