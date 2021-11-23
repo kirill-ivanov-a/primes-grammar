@@ -1,13 +1,11 @@
-from src.grammars.symbol import Symbol
 from src.grammars.production import Production
-
-from typing import List
+from src.grammars.sentence import Sentence
 
 __all__ = ["DerivationUnit"]
 
 
 class DerivationUnit:
-    def __init__(self, production: Production, sentence: List[Symbol]):
+    def __init__(self, production: Production, sentence: Sentence):
         self._production = production
         self._sentence = sentence
 

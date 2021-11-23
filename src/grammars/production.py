@@ -19,6 +19,9 @@ class Production:
     def __str__(self):
         return " ".join(map(str, self._head)) + " -> " + " ".join(map(str, self._body))
 
+    def __repr__(self):
+        return self.__str__()
+
     def __eq__(self, other: "Production"):
         if isinstance(other, Production):
             return self.head == other.head and self.body == other.body
