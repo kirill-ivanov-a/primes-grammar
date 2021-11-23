@@ -1,4 +1,5 @@
 from src.grammars.production import *
+from src.grammars.sentence import *
 from src.grammars.symbol import *
 from src.grammars.terminal import *
 from src.grammars.variable import *

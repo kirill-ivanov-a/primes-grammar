@@ -1,3 +1,4 @@
+from src.grammars.sentence import Sentence
 from src.utils.derivation_unit import DerivationUnit
 from src.utils.tm_to_unrestricted import TMToUnrestricted
 
@@ -37,6 +38,48 @@ class WordUtils:
         )
 
     @staticmethod
+    def accepts(ug: UnrestrictedGrammar, word: str):
+        term_sentence = Sentence([Terminal(x) for x in word])
+        init_sentence = Sentence([ug.start_symbol])
+
+        derivation_sequence = dict()
+        queue = deque([init_sentence])
+
+        while queue:
+            sentence = queue.popleft()
+            if sentence not in derivation_sequence:
+                derivation_sequence[sentence] = list()
+
+            if sentence.is_terminal():
+                if sentence == term_sentence:
+                    return derivation_sequence[sentence]
+                if len(sentence.objects) > len(term_sentence.objects):
+                    return None
+
+            for production in filter(
+                lambda p: len(p.head) <= len(sentence.objects), ug.productions
+            ):
+                for i in range(len(sentence.objects) - len(production.head) + 1):
+                    start = i
+                    final = i + len(production.head)
+                    if production.head == sentence.objects[start:final]:
+                        next_sentence = Sentence(
+                            sentence.objects[:start]
+                            + production.body
+                            + sentence.objects[final:]
+                        )
+                        if next_sentence not in derivation_sequence:
+                            derivation_sequence[next_sentence] = derivation_sequence[
+                                sentence
+                            ] + [
+                                DerivationUnit(
+                                    production=production, sentence=next_sentence
+                                )
+                            ]
+                            queue.append(next_sentence)
+        return None
+
+    @staticmethod
     def contains(
         grammar: UnrestrictedGrammar,
         n: int,
@@ -54,7 +97,7 @@ class WordUtils:
 
         while len(queue):
             node = queue.pop()
-            sentence = node.sentence
+            sentence = node.objects
             found_final = False
 
             if not need_derivation:
