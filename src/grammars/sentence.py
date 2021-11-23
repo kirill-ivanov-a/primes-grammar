@@ -30,6 +30,9 @@ class Sentence:
     def __hash__(self):
         return sum(map(hash, self._sentence))
 
+    def remove_epsilons(self):
+        return self.__class__([obj for obj in self.objects if obj.value != "$"])
+
     def is_terminal(self):
         return all(isinstance(symb, Terminal) for symb in self._sentence)
 
