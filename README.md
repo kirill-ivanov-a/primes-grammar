@@ -42,29 +42,6 @@ optional arguments:
 ## Examples
 
 ```bash
-python3 -m src --number=2 --grammar=t1 --derivation=1
-
-INFO: 2 is prime
-Start symbol: S55
-Used production: S55 -> S1 S27
-Sentence: S1 S27
-Used production: S1 -> S24
-Sentence: S24 S27
-Used production: S27 -> S60
-Sentence: S24 S60
-Used production: S24 S60 -> S145 S57
-Sentence: S145 S57
-Used production: S57 -> S86
-Sentence: S145 S86
-Used production: S86 -> S59
-Sentence: S145 S59
-Used production: S59 -> 1
-Sentence: S145 1
-Used production: S145 1 -> 1 1
-Sentence: 1 1
-```
-
-```bash
 python3 -m src --number=2 --grammar=t0 --derivation=1
 
 INFO: 2 is prime
