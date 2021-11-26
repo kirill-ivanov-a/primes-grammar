@@ -50,7 +50,12 @@ class UnrestrictedGrammar:
 
     def rename_variables(self) -> "UnrestrictedGrammar":
         mapper = {self._start_symbol: Variable("S")}
-        mapper.update({v: Variable(f"S{i}") for i, v in enumerate(self._variables - {self._start_symbol})})
+        mapper.update(
+            {
+                v: Variable(f"S{i}")
+                for i, v in enumerate(self._variables - {self._start_symbol})
+            }
+        )
         mapper.update(zip(self._terminals, self._terminals))
 
         new_productions = {
