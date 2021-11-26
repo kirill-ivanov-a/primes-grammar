@@ -13,13 +13,13 @@ Prime grammars are located [here](https://github.com/kirill-ivanov-a/primes-gram
 Python >=3.8. No external libraries were used.
 
 ## Installation
-1. Clone this repository: 
+1. Clone this repository:
 ```bash
 git clone https://github.com/kirill-ivanov-a/primes-grammar.git
 ```
 2. Go to source directory:
 ```bash
-cd primes-grammar/ 
+cd primes-grammar/
 ```
 ## Usage
 __NOTE:__ symbol `$` is used as epsilon in T0 grammar
