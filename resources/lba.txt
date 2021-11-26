@@ -1,100 +1,87 @@
-initial_state = init
-final_states = prime
+initial_state = input
+final_states = accept
 
-#############
 
-init,% ==> init,%,>
+input,% ==> input,%,>
 
-init,1 ==> checkInit,#,>
+input,1 ==> chkTwo,#,>
 
-checkInit,1 ==> markDiv,#,>
+chkTwo,1 ==> mrk,#,>
 
-#############
+cpy1,1 ==> cpy1,1,<
 
-copy1,1 ==> copy1,1,<
+cpy1,# ==> cpy2,#,<
 
-copy1,# ==> copy2,#,<
+cpy2,1 ==> cpy2,1,<
 
-copy2,1 ==> copy2,1,<
+cpy2,# ==> cpy3,1,>
 
-copy2,# ==> copy3,1,>
+cpy3,1 ==> cpy4,#,>
 
-copy3,1 ==> copy4,#,>
+cpy3,# ==> cpyf1,#,<
 
-copy3,# ==> finishCopy1,#,<
+cpyf1,1 ==> cpyf2,#,>
 
-#############
+cpyf2,# ==> cpyf3,#,>
 
-finishCopy1,1 ==> finishCopy2,#,>
+cpyf3,1 ==> cpye1,#,>
 
-finishCopy2,# ==> finishCopy3,#,>
+cpyf3,# ==> cpye2,#,>
 
-finishCopy3,1 ==> copyDone1,#,>
+cpye1,1 ==> cpye1,1,>
 
-finishCopy3,# ==> copyDone2,#,>
+cpye1,# ==> cpye2,1,>
 
-copyDone1,1 ==> copyDone1,1,>
+cpye2,# ==> cpye3,#,>
 
-copyDone1,# ==> copyDone2,1,>
+cpye2,1 ==> cpye3,#,>
 
-copyDone2,# ==> copyDone3,#,>
+cpye2,$ ==> mvl,$,<
 
-copyDone2,1 ==> copyDone3,#,>
+cpye3,1 ==> cpy1,#,<
 
-copyDone2,$ ==> moveLeft,$,<
+cpye3,# ==> cpy1,#,<
 
-copyDone3,1 ==> copy1,#,<
+cpye3,$ ==> reject,$,-
 
-copyDone3,# ==> copy1,#,<
+cpy4,1 ==> cpy4,1,>
 
-copyDone3,$ ==> notPrime,$,-
+cpy4,# ==> cpy5,#,>
 
-#############
+cpy5,1 ==> cpy5,1,>
 
-copy4,1 ==> copy4,1,>
+cpy5,# ==> cpy6,1,>
 
-copy4,# ==> copy5,#,>
+cpy6,1 ==> cpy1,#,<
 
-copy5,1 ==> copy5,1,>
+cpy6,# ==> cpy1,#,<
 
-copy5,# ==> copy6,1,>
+cpy6,$ ==> mvl,$,<
 
-copy6,1 ==> copy1,#,<
+mrks,1 ==> inc1,#,>
 
-copy6,# ==> copy1,#,<
+mrks,# ==> inc2,#,>
 
-copy6,$ ==> moveLeft,$,<
+inc1,1 ==> inc1,1,>
 
-#############
+inc1,# ==> inc2,1,>
 
-markSt,1 ==> incDiv1,#,>
+inc2,# ==> inc3,1,>
 
-markSt,# ==> incDiv2,#,>
+inc2,1 ==> inc2,1,>
 
-incDiv1,1 ==> incDiv1,1,>
+inc3,# ==> mrk,#,>
 
-incDiv1,# ==> incDiv2,1,>
+inc3,1 ==> mrk,#,>
 
-incDiv2,# ==> incDiv3,1,>
+mvl,1 ==> mvl,1,<
 
-incDiv2,1 ==> incDiv2,1,>
+mvl,# ==> mvl,#,<
 
-incDiv3,# ==> markDiv,#,>
+mvl,% ==> mrks,%,>
 
-incDiv3,1 ==> markDiv,#,>
+mrk,$ ==> accept,$,-
 
-#############
+mrk,1 ==> cpy1,#,<
 
-moveLeft,1 ==> moveLeft,1,<
-
-moveLeft,# ==> moveLeft,#,<
-
-moveLeft,% ==> markSt,%,>
-
-#############
-
-markDiv,$ ==> prime,$,-
-
-markDiv,1 ==> copy1,#,<
-
-markDiv,# ==> copy1,#,<
+mrk,# ==> cpy1,#,<

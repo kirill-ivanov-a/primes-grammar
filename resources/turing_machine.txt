@@ -1,98 +1,85 @@
-initial_state = init
-final_states = is_prime
+initial_state = input
+final_states = accept
 
-#############
 
-init,1 ==> checkInit,#,>
+input,1 ==> chkTwo,#,>
 
-checkInit,1 ==> markDiv,#,>
+chkTwo,1 ==> mrks,#,>
 
-#############
+mrks,B ==> accept,B,-
 
-markDiv,_ ==> is_prime,_,-
+mrks,1 ==> cpy1,#,<
 
-markDiv,1 ==> copy1,#,<
+mrks,# ==> cpy1,#,<
 
-markDiv,# ==> copy1,#,<
+cpy1,1 ==> cpy1,1,<
 
-#############
+cpy1,# ==> cpy2,#,<
 
-copy1,1 ==> copy1,1,<
+cpy2,1 ==> cpy2,1,<
 
-copy1,# ==> copy2,#,<
+cpy2,# ==> cpy3,1,>
 
-copy2,1 ==> copy2,1,<
+cpy3,1 ==> cpy4,#,>
 
-copy2,# ==> copy3,1,>
+cpy3,# ==> cpyf1,#,<
 
-copy3,1 ==> copy4,#,>
+cpy4,1 ==> cpy4,1,>
 
-copy3,# ==> finishCopy1,#,<
+cpy4,# ==> cpy5,#,>
 
-#############
+cpy5,1 ==> cpy5,1,>
 
-copy4,1 ==> copy4,1,>
+cpy5,# ==> cpy6,1,>
 
-copy4,# ==> copy5,#,>
+cpy6,1 ==> cpy1,#,<
 
-copy5,1 ==> copy5,1,>
+cpy6,# ==> cpy1,#,<
 
-copy5,# ==> copy6,1,>
+cpy6,B ==> mvl,B,<
 
-copy6,1 ==> copy1,#,<
+cpyf1,1 ==> cpyf2,#,>
 
-copy6,# ==> copy1,#,<
+cpyf2,# ==> cpyf3,#,>
 
-copy6,_ ==> moveLeft,_,<
+cpyf3,1 ==> cpye1,#,>
 
-#############
+cpyf3,# ==> cpye2,#,>
 
-finishCopy1,1 ==> finishCopy2,#,>
+cpye1,1 ==> cpye1,1,>
 
-finishCopy2,# ==> finishCopy3,#,>
+cpye1,# ==> cpye2,1,>
 
-finishCopy3,1 ==> copyDone1,#,>
+cpye2,# ==> cpye3,#,>
 
-finishCopy3,# ==> copyDone2,#,>
+cpye2,1 ==> cpye3,#,>
 
-copyDone1,1 ==> copyDone1,1,>
+cpye2,B ==> mvl,B,<
 
-copyDone1,# ==> copyDone2,1,>
+cpye3,1 ==> cpy1,#,<
 
-copyDone2,# ==> copyDone3,#,>
+cpye3,# ==> cpy1,#,<
 
-copyDone2,1 ==> copyDone3,#,>
+cpye3,B ==> reject,B,-
 
-copyDone2,_ ==> moveLeft,_,<
+mvl,1 ==> mvl,1,<
 
-copyDone3,1 ==> copy1,#,<
+mvl,# ==> mvl,#,<
 
-copyDone3,# ==> copy1,#,<
+mvl,B ==> mrks,B,>
 
-copyDone3,_ ==> notPrime,_,-
+mrks,1 ==> inc1,#,>
 
-#############
+mrks,# ==> inc2,#,>
 
-moveLeft,1 ==> moveLeft,1,<
+inc1,1 ==> inc1,1,>
 
-moveLeft,# ==> moveLeft,#,<
+inc1,# ==> inc2,1,>
 
-moveLeft,_ ==> markSt,_,>
+inc2,# ==> inc3,1,>
 
-#############
+inc2,1 ==> inc2,1,>
 
-markSt,1 ==> incDiv1,#,>
+inc3,# ==> mrks,#,>
 
-markSt,# ==> incDiv2,#,>
-
-incDiv1,1 ==> incDiv1,1,>
-
-incDiv1,# ==> incDiv2,1,>
-
-incDiv2,# ==> incDiv3,1,>
-
-incDiv2,1 ==> incDiv2,1,>
-
-incDiv3,# ==> markDiv,#,>
-
-incDiv3,1 ==> markDiv,#,>
+inc3,1 ==> mrks,#,>

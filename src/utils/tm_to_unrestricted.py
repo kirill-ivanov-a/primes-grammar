@@ -11,7 +11,7 @@ __all__ = ["TMToUnrestricted"]
 class TMToUnrestricted:
     SIGMA = {"1"}
     EPS = "$"
-    BLANK = "_"
+    BLANK = "B"
     SIGMA_EPS = SIGMA | set(EPS)
 
     @staticmethod
