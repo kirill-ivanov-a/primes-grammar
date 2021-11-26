@@ -14,18 +14,18 @@ from src.utils.lba_to_csg import lba_to_csg
 
 
 def __generate_grammar(grammar_type, path):
-    tm = TuringMachine.from_file(
+    machine = TuringMachine.from_file(
         filename=Config.TURING_MACHINE_PATH if grammar_type == "t0" else Config.LBA_PATH
     )
-    csg = None
+    grammar = None
     if grammar_type == "t0":
-        csg = TMToUnrestricted.convert(tm)
+        grammar = TMToUnrestricted.convert(machine)
     elif grammar_type == "t1":
-        csg = lba_to_csg(lba=tm, alphabet={"1"})
+        grammar = lba_to_csg(lba=machine, alphabet={"1"})
 
-    csg = csg.rename_variables()
+    grammar = grammar.rename_variables()
 
-    csg.to_file(path)
+    grammar.to_file(path)
 
     return pathlib.Path(path)
 
@@ -52,7 +52,7 @@ def check_prime(grammar_type, number, derivation):
         )
 
     grammar = UnrestrictedGrammar.from_file(path=grammar_path)
-    result = WordUtils.accepts(ug=grammar, word="1" * int(number))
+    result = WordUtils.contains(ug=grammar, word="1" * int(number))
 
     if not result:
         logging.info(msg=f" {number} is not prime")

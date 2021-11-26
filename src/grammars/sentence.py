@@ -1,6 +1,4 @@
-import enum
 from typing import List
-
 from src.grammars.terminal import Terminal
 from src.grammars.symbol import Symbol
 

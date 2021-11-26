@@ -1,35 +1,16 @@
 from src.grammars.sentence import Sentence
 from src.utils.derivation_unit import DerivationUnit
-from src.utils.tm_to_unrestricted import TMToUnrestricted
-
-from src.grammars.symbol import Symbol
 from src.grammars.variable import Variable
 from src.grammars.terminal import Terminal
-from src.grammars.production import Production
-
 from src.grammars.unrestricted_grammar import UnrestrictedGrammar
-
-from src.machines.state import State
-
-from typing import Set, List
-
 from collections import deque
 
 __all__ = ["WordUtils"]
 
 
 class WordUtils:
-    eps_blank_symbol = Variable(f"[{TMToUnrestricted.EPS}|{TMToUnrestricted.BLANK}]")
-
     @staticmethod
-    def is_word_hieroglyph(symbol: Symbol):
-        return (
-            "[" in symbol.get_value()
-            and symbol.get_value() != WordUtils.eps_blank_symbol.get_value()
-        )
-
-    @staticmethod
-    def accepts(ug: UnrestrictedGrammar, word: str):
+    def contains(ug: UnrestrictedGrammar, word: str):
         term_sentence = Sentence([Terminal(x) for x in word])
         init_sentence = Sentence([ug.start_symbol])
 

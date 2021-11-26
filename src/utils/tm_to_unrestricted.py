@@ -16,6 +16,13 @@ class TMToUnrestricted:
 
     @staticmethod
     def convert(tm: TuringMachine):
+        """
+        Построение основано на:
+
+        Мартыненко Б.К. Языки и трансляции:
+        Учеб. пособие — Изд. 2-е, испр. и доп. — СПб.:
+        Изд-во С.-Петерб. ун-та, 2013. 265 с.
+        """
         gamma = TMToUnrestricted.__get_tape_symbols(tm)
 
         s = Variable("S")

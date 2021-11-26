@@ -17,6 +17,13 @@ def lba_to_csg(
     L: str = "%",
     R: str = "$",
 ) -> UnrestrictedGrammar:
+    """
+    Построение основано на:
+
+    Мартыненко Б.К. Языки и трансляции:
+    Учеб. пособие — Изд. 2-е, испр. и доп. — СПб.:
+    Изд-во С.-Петерб. ун-та, 2013. 265 с.
+    """
     alphabet = {Terminal(symbol) for symbol in alphabet}
     productions = set()
     A1 = Variable("A1")
@@ -46,7 +53,6 @@ def lba_to_csg(
 
 def __add_initial_productions(alphabet, A1, A2, q0, L, R, productions):
     for a in alphabet:
-        # 4.1, 4.2, 4.3, |w| > 1
         productions |= {
             Production(
                 [A1],
@@ -83,7 +89,6 @@ def __add_motion_productions(
                         and Y == L
                         and trans.direction == Direction.RIGHT
                     ):
-                        # 5.1
                         productions.add(
                             Production(
                                 [__create_variable(q, L, X, a)],
@@ -92,17 +97,14 @@ def __add_motion_productions(
                         )
                     elif ctx.tape_sym == X and trans.direction == Direction.LEFT:
                         productions |= {
-                            # 5.2
                             Production(
                                 [__create_variable(L, q, X, a)],
                                 [__create_variable(p, L, Y, a)],
                             ),
-                            # 6.2
                             Production(
                                 [__create_variable(Z, b), __create_variable(q, X, a)],
                                 [__create_variable(p, Z, b), __create_variable(Y, a)],
                             ),
-                            # 6.4
                             Production(
                                 [
                                     __create_variable(L, Z, b),
@@ -113,7 +115,6 @@ def __add_motion_productions(
                                     __create_variable(Y, a),
                                 ],
                             ),
-                            # 7.3
                             Production(
                                 [
                                     __create_variable(Z, b),
@@ -140,7 +141,6 @@ def __add_motion_productions(
                         and Y == R
                         and trans.direction == Direction.LEFT
                     ):
-                        # 7.2
                         productions.add(
                             Production(
                                 [__create_variable(X, a, q, R)],
@@ -149,7 +149,6 @@ def __add_motion_productions(
                         )
                     elif ctx.tape_sym == X and trans.direction == Direction.RIGHT:
                         productions |= {
-                            # 5.3
                             Production(
                                 [
                                     __create_variable(L, q, X, a),
@@ -170,12 +169,10 @@ def __add_motion_productions(
                                     __create_variable(p, Z, b, R),
                                 ],
                             ),
-                            # 6.1
                             Production(
                                 [__create_variable(q, X, a), __create_variable(Z, b)],
                                 [__create_variable(Y, a), __create_variable(p, Z, b)],
                             ),
-                            # 6.3
                             Production(
                                 [
                                     __create_variable(q, X, a),
@@ -186,7 +183,6 @@ def __add_motion_productions(
                                     __create_variable(p, Z, b, R),
                                 ],
                             ),
-                            # 7.1
                             Production(
                                 [__create_variable(q, X, a, R)],
                                 [__create_variable(Y, a, p, R)],
@@ -226,7 +222,6 @@ def __add_motion_productions(
 def __add_final_state_productions(
     final_states, alphabet, tape_symbols, L, R, productions
 ):
-    # 8.1 -- 8.5
     for q in {st.value for st in final_states}:
         for X in tape_symbols:
             for a in alphabet:
@@ -255,7 +250,6 @@ def __add_final_state_productions(
 
 
 def __add_restoring_productions(alphabet, tape_symbols, L, R, productions):
-    # 9.1 -- 9.5
     for X in tape_symbols:
         for a, b in product(alphabet, alphabet):
             productions |= {
